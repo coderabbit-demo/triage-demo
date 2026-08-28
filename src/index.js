@@ -1,8 +1,8 @@
 'use strict';
 
 const express = require('express');
-const { listUsers, findUserById } = require('./db');
-const { isAuthorizedAdmin } = require('./admin');
+const { listUsers, findUserById, deleteUserById } = require('./db');
+const { isAuthorizedAdmin, searchUsersQuery } = require('./admin');
 
 const app = express();
 
@@ -14,7 +14,17 @@ app.delete('/admin/users/:id', (req, res) => {
   if (!isAuthorizedAdmin(req)) {
     return res.status(403).json({ error: 'forbidden' });
   }
-  return res.json({ deleted: Number(req.params.id) });
+  const id = Number(req.params.id);
+  deleteUserById(id);
+  return res.json({ deleted: id });
+});
+
+app.get('/admin/search', (req, res) => {
+  if (!isAuthorizedAdmin(req)) {
+    return res.status(403).json({ error: 'forbidden' });
+  }
+  const db = require('./db');
+  return res.json(searchUsersQuery(db, req.query.term || ''));
 });
 
 app.get('/users', (req, res) => {

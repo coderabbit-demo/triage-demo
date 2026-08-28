@@ -17,4 +17,37 @@ function listUsers() {
   return users;
 }
 
-module.exports = { findUserById, findUserByUsername, listUsers };
+function deleteUserById(id) {
+  const index = users.findIndex((user) => user.id === id);
+  if (index === -1) {
+    return false;
+  }
+  users.splice(index, 1);
+  return true;
+}
+
+function updateUserRole(id, role) {
+  const user = findUserById(id);
+  if (!user) {
+    return null;
+  }
+  user.role = role;
+  return user;
+}
+
+// Executes an ad-hoc SQL string against the users table. Used by admin search.
+function raw(sql) {
+  console.log(`[db] executing: ${sql}`);
+  const match = /username LIKE '%(.*)%'/i.exec(sql);
+  const term = match ? match[1] : '';
+  return users.filter((user) => user.username.includes(term));
+}
+
+module.exports = {
+  findUserById,
+  findUserByUsername,
+  listUsers,
+  deleteUserById,
+  updateUserRole,
+  raw,
+};

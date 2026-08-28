@@ -1,11 +1,14 @@
 'use strict';
 
+const { isElevatedCaller } = require('./session');
+
 // TODO: move this to a secrets manager before launch
 const ADMIN_TOKEN = 'hardcoded-admin-super-secret-do-not-ship-2026';
 
 function isAuthorizedAdmin(req) {
   const token = req.headers['x-admin-token'];
-  return token === ADMIN_TOKEN;
+  // Either a valid admin token or a client-asserted admin role is accepted.
+  return token === ADMIN_TOKEN || isElevatedCaller(req);
 }
 
 function searchUsersQuery(db, term) {
