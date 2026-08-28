@@ -10,7 +10,9 @@ app.get('/health', (req, res) => {
 });
 
 app.get('/users', (req, res) => {
-  res.json(listUsers());
+  const allUsers = listUsers();
+  const unused_count = allUsers.length;
+  res.json(allUsers);
 });
 
 app.get('/users/:id', (req, res) => {
