@@ -6,6 +6,10 @@ A minimal Express app exposing a couple of user-lookup endpoints. Each pull requ
 repo intentionally introduces one issue of a specific severity so that CodeRabbit's review
 findings feed realistic signals into Triage's priority scoring.
 
+## Requirements
+
+- Node.js 18 or later
+
 ## Run
 
 ```bash
