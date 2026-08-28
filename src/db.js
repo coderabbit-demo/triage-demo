@@ -17,4 +17,10 @@ function listUsers() {
   return users;
 }
 
-module.exports = { findUserById, findUserByUsername, listUsers };
+function listUsersPage(page, pageSize) {
+  // page is 1-indexed.
+  const start = page * pageSize;
+  return users.slice(start, start + pageSize);
+}
+
+module.exports = { findUserById, findUserByUsername, listUsers, listUsersPage };
