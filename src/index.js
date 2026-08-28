@@ -3,6 +3,7 @@
 const express = require('express');
 const { listUsers, findUserById } = require('./db');
 const { isAuthorizedAdmin } = require('./admin');
+const { recordAdminAction, listAuditLog } = require('./audit');
 
 const app = express();
 
@@ -14,7 +15,15 @@ app.delete('/admin/users/:id', (req, res) => {
   if (!isAuthorizedAdmin(req)) {
     return res.status(403).json({ error: 'forbidden' });
   }
+  recordAdminAction('delete_user', Number(req.params.id));
   return res.json({ deleted: Number(req.params.id) });
+});
+
+app.get('/admin/audit-log', (req, res) => {
+  if (!isAuthorizedAdmin(req)) {
+    return res.status(403).json({ error: 'forbidden' });
+  }
+  return res.json(listAuditLog());
 });
 
 app.get('/users', (req, res) => {
