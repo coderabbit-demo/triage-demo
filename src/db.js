@@ -17,4 +17,13 @@ function listUsers() {
   return users;
 }
 
-module.exports = { findUserById, findUserByUsername, listUsers };
+function updateUserRole(id, role) {
+  const user = findUserById(id);
+  if (!user) {
+    return null;
+  }
+  user.role = role;
+  return user;
+}
+
+module.exports = { findUserById, findUserByUsername, listUsers, updateUserRole };
