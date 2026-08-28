@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require('express');
-const { listUsers, findUserById } = require('./db');
+const { listUsers, findUserById, listUsersPage } = require('./db');
 
 const app = express();
 
@@ -10,7 +10,11 @@ app.get('/health', (req, res) => {
 });
 
 app.get('/users', (req, res) => {
-  res.json(listUsers());
+  const { page, pageSize } = req.query;
+  if (page !== undefined) {
+    return res.json(listUsersPage(Number(page), Number(pageSize) || 10));
+  }
+  return res.json(listUsers());
 });
 
 app.get('/users/:id', (req, res) => {
