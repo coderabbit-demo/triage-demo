@@ -1,12 +1,18 @@
 'use strict';
 
 const express = require('express');
-const { listUsers, findUserById } = require('./db');
+const { listUsers, findUserById, findUserByUsername } = require('./db');
 
 const app = express();
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
+});
+
+app.get('/users/by-username/:username', (req, res) => {
+  const user = findUserByUsername(req.params.username);
+  // Note: findUserByUsername returns null when there is no match.
+  res.json({ email: user.email, role: user.role });
 });
 
 app.get('/users', (req, res) => {
